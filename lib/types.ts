@@ -1,0 +1,88 @@
+export type Locale = "fa" | "en" | "ko";
+export type Theme = "light" | "dark" | "retro";
+
+export interface Project {
+  id: string | number;
+  title: string;
+  desc: string;
+  category: string;
+  tags: string[];
+  image: string | null;
+  onlineLink: string | null;
+  gitLink: string | null;
+}
+
+export interface ExpertiseItem {
+  icon: "research" | "design" | "system" | "handoff";
+  t: string;
+  d: string;
+}
+
+export interface ProcessStep {
+  t: string;
+  d: string;
+}
+
+export interface Copy {
+  dir: "rtl" | "ltr";
+  nav: { home: string; about: string; work: string; contact: string };
+  eyebrow: string;
+  name: string;
+  tagline: string;
+  sub: string;
+  ctaContact: string;
+  ctaWork: string;
+  badgeAvailable: string;
+  badgeTool: string;
+  stat1n: string;
+  stat1l: string;
+  stat2n: string;
+  stat2l: string;
+  canvasTitle: string;
+  layers: string[];
+  marquee: string[];
+  aboutEyebrow: string;
+  aboutTitle: string;
+  aboutBody: string;
+  expertiseEyebrow: string;
+  expertiseTitle: string;
+  expertise: ExpertiseItem[];
+  processEyebrow: string;
+  processTitle: string;
+  process: ProcessStep[];
+  workEyebrow: string;
+  workTitle: string;
+  workAll: string;
+  seeAll: string;
+  workPageTitle: string;
+  workPageSub: string;
+  filterAll: string;
+  searchPlaceholder: string;
+  noResults: string;
+  loadMore: string;
+  detailBack: string;
+  detailViewLive: string;
+  detailViewCode: string;
+  detailDescPlaceholder: string;
+  detailNotFound: string;
+  workLoading: string;
+  workFallback: string;
+  viewCase: string;
+  viewDribbble: string;
+  linksEyebrow: string;
+  linksTitle: string;
+  portfolio: string;
+  resume: string;
+  formName: string;
+  formEmail: string;
+  formMsg: string;
+  formSend: string;
+  formSending: string;
+  formOk: string;
+  formErr: string;
+  formErrRequired: string;
+  formErrEmail: string;
+  back: string;
+  footer: string;
+  made: string;
+}

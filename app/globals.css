@@ -1,0 +1,184 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap");
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---------- shadcn/ui design tokens, mapped to the site's own theme system ---------- */
+:root {
+  --radius: 0.75rem;
+
+  --background: #F5F8FC;
+  --foreground: #0B1220;
+  --card: #FFFFFF;
+  --card-foreground: #0B1220;
+  --popover: #FFFFFF;
+  --popover-foreground: #0B1220;
+  --primary: #007BFF;
+  --primary-foreground: #FFFFFF;
+  --secondary: #EEF4FC;
+  --secondary-foreground: #0B1220;
+  --muted: #EEF4FC;
+  --muted-foreground: #5B6472;
+  --accent: #EEF4FC;
+  --accent-foreground: #0B1220;
+  --destructive: #FF5F57;
+  --border: #E1E8F1;
+  --input: #E1E8F1;
+  --ring: #007BFF;
+
+  /* Site-specific aliases used across components */
+  --surface: var(--card);
+  --surface2: var(--muted);
+  --text: var(--foreground);
+}
+
+.dark {
+  --background: #0A0E16;
+  --foreground: #EDF1F7;
+  --card: #10151F;
+  --card-foreground: #EDF1F7;
+  --popover: #10151F;
+  --popover-foreground: #EDF1F7;
+  --primary: #007BFF;
+  --primary-foreground: #FFFFFF;
+  --secondary: #151B27;
+  --secondary-foreground: #EDF1F7;
+  --muted: #151B27;
+  --muted-foreground: #8B96AA;
+  --accent: #151B27;
+  --accent-foreground: #EDF1F7;
+  --destructive: #FF5F57;
+  --border: #212A38;
+  --input: #212A38;
+  --ring: #007BFF;
+}
+
+/* Warm vintage-terminal palette — same #007BFF brand accent throughout */
+.retro {
+  --background: #EEE4CC;
+  --foreground: #2B2417;
+  --card: #F8F1DE;
+  --card-foreground: #2B2417;
+  --popover: #F8F1DE;
+  --popover-foreground: #2B2417;
+  --primary: #007BFF;
+  --primary-foreground: #FFFFFF;
+  --secondary: #E9DCB8;
+  --secondary-foreground: #2B2417;
+  --muted: #E9DCB8;
+  --muted-foreground: #6E6248;
+  --accent: #E9DCB8;
+  --accent-foreground: #2B2417;
+  --destructive: #C1502E;
+  --border: #C9B98A;
+  --input: #C9B98A;
+  --ring: #007BFF;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+html,
+body {
+  background: var(--background);
+  color: var(--foreground);
+  transition: background 0.3s, color 0.3s;
+  scroll-behavior: smooth;
+}
+
+/* Sections targeted by #anchor links must not end up hidden underneath the sticky navbar */
+section[id] {
+  scroll-margin-top: 88px;
+}
+
+/* Retro theme: vintage terminal/typewriter headings, same brand blue throughout */
+.retro h1,
+.retro h2 {
+  font-family: "Space Mono", "Vazirmatn", "Noto Sans KR", monospace;
+  letter-spacing: -0.01em;
+}
+.retro .glow:hover {
+  box-shadow: 4px 4px 0 var(--primary);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes blob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(20px, -15px) scale(1.06); }
+}
+@keyframes pulse-cursor {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.92); }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes marquee-rtl {
+  from { transform: translateX(0); }
+  to { transform: translateX(50%); }
+}
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translate(-50%, 12px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.chip {
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.glow:hover {
+  box-shadow: 0 8px 30px rgba(0, 123, 255, 0.25);
+}
+.marquee-track {
+  animation: marquee 22s linear infinite;
+}
+[dir="rtl"] .marquee-track {
+  animation: marquee-rtl 22s linear infinite;
+}
+.work-card:hover .work-arrow {
+  transform: translate(4px, -4px);
+  opacity: 1;
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--muted) 25%, var(--border) 37%, var(--muted) 63%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite;
+}
