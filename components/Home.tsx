@@ -157,9 +157,9 @@ export default function Home() {
         EMAILJS_SERVICE_ID as string,
         EMAILJS_TEMPLATE_ID as string,
         {
-          from_name: form.name,
-          from_email: form.email,
-          reply_to: form.email,
+          name: form.name,
+          email: form.email,
+          // reply_to: form.email,
           message: form.message,
         },
         { publicKey: EMAILJS_PUBLIC_KEY as string }
@@ -420,6 +420,7 @@ export default function Home() {
               <div>
                 <Input
                   type="text"
+                   id="from_name"
                   placeholder={t.formName}
                   value={form.name}
                   onChange={(e) => updateField("name", e.target.value)}
@@ -430,6 +431,7 @@ export default function Home() {
               <div>
                 <Input
                   type="email"
+                   id="from_email"
                   placeholder={t.formEmail}
                   value={form.email}
                   onChange={(e) => updateField("email", e.target.value)}
