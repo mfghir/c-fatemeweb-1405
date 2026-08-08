@@ -35,9 +35,9 @@ export default function Header() {
 
   const navItems = [
     { href: "/", label: t.nav.home },
-    { href: "/#about", label: t.nav.about },
+    { href: "/about", label: t.nav.about },
     { href: "/works", label: t.nav.work },
-    { href: "/#contact", label: t.nav.contact },
+    { href: "/contact", label: t.nav.contact },
   ];
 
   return (
@@ -49,15 +49,12 @@ export default function Header() {
       }}
     >
       <div className="max-w-5xl mx-auto flex items-center justify-between gap-4 px-6 py-4">
-        {/* Logo: rounded badge + name, no more of a bare monogram */}
+        {/* Logo: rounded badge + name — single line, kept simple */}
         <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
           <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold text-sm shadow-sm transition-transform group-hover:-translate-y-0.5">
             F
           </span>
-          <span className="hidden sm:flex flex-col leading-tight">
-            <span className="text-sm font-extrabold">{t.name}</span>
-            <span className="text-[10px] font-medium tracking-wide text-muted-foreground">{t.eyebrow}</span>
-          </span>
+          <span className="hidden sm:block text-sm font-extrabold">{t.name}</span>
         </Link>
 
         {/* Nav as a single pill-shaped segmented control, echoing the lang/theme switchers */}

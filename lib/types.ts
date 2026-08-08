@@ -35,10 +35,6 @@ export interface Copy {
   ctaWork: string;
   badgeAvailable: string;
   badgeTool: string;
-  stat1n: string;
-  stat1l: string;
-  stat2n: string;
-  stat2l: string;
   canvasTitle: string;
   layers: string[];
   marquee: string[];

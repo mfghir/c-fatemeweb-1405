@@ -29,7 +29,7 @@ export default function WorkCard({ project, index }: { project: Project; index: 
             referrerPolicy="no-referrer"
             loading="lazy"
             onError={() => setImgFailed(true)}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
         ) : (
           <div style={{ borderColor: `${tint}55` }} className="w-16 h-16 rounded-2xl flex items-center justify-center bg-card border">
