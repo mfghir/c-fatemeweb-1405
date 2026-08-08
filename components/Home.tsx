@@ -32,6 +32,33 @@ const SOCIALS = [
 
 const EXPERTISE_ICONS = { research: Search, design: PenTool, system: Layers, handoff: GitBranch } as const;
 
+function Starburst({
+  color,
+  size = 72,
+  className = "",
+  style = {},
+}: {
+  color: string;
+  size?: number;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  return (
+    <div
+      aria-hidden
+      className={`absolute pointer-events-none -z-10 ${className}`}
+      style={{
+        width: size,
+        height: size,
+        background: color,
+        clipPath:
+          "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
+        ...style,
+      }}
+    />
+  );
+}
+
 function MagneticButton({
   children,
   style,
@@ -101,7 +128,7 @@ type FormErrors = Partial<Record<keyof FormState, string>>;
 type Status = "idle" | "sending" | "ok" | "err";
 
 export default function Home() {
-  const { t, isDark } = useSite();
+  const { t, isDark, isRetro } = useSite();
   const [spot, setSpot] = useState({ x: 50, y: 30 });
   const [form, setForm] = useState<FormState>({ name: "", email: "", message: "" });
   const [errors, setErrors] = useState<FormErrors>({});
@@ -153,14 +180,24 @@ export default function Home() {
 
     setStatus("sending");
     try {
+      // Sent under several common key names AND folded into the message body itself —
+      // if your EmailJS template only has {{message}} wired up (not {{from_name}} /
+      // {{from_email}}), the sender's name/email will still show up because they're
+      // part of the message text. For the name/email to appear in their own template
+      // fields, add {{from_name}} and {{from_email}} placeholders in your EmailJS
+      // template's content (see README).
       const res = await emailjs.send(
         EMAILJS_SERVICE_ID as string,
         EMAILJS_TEMPLATE_ID as string,
         {
+          from_name: form.name,
+          from_email: form.email,
           name: form.name,
           email: form.email,
-          // reply_to: form.email,
-          message: form.message,
+          user_name: form.name,
+          user_email: form.email,
+          reply_to: form.email,
+          message: `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`,
         },
         { publicKey: EMAILJS_PUBLIC_KEY as string }
       );
@@ -201,27 +238,42 @@ export default function Home() {
           style={{ background: "#007BFF", opacity: isDark ? 0.18 : 0.12, animation: "blob 9s ease-in-out infinite" }}
           className="absolute w-72 h-72 rounded-full blur-3xl -top-10 -z-10"
         />
+        {isRetro && (
+          <>
+            <Starburst color="var(--retro-mint)" size={90} style={{ top: -20, right: "38%", opacity: 0.9, animation: "spin-slow 22s linear infinite" }} />
+            <Starburst color="var(--retro-coral)" size={54} style={{ bottom: 10, left: "2%", opacity: 0.85, animation: "spin-slow 18s linear infinite reverse" }} />
+            <Starburst color="var(--retro-orange)" size={40} style={{ top: "45%", right: "4%", opacity: 0.8, animation: "spin-slow 15s linear infinite" }} />
+          </>
+        )}
 
         <div>
           <div className="flex items-center gap-2 mb-5">
             <span className="w-2 h-2 rounded-full bg-primary" />
             <span className="text-xs font-bold tracking-widest uppercase text-primary">{t.eyebrow}</span>
           </div>
+
           <h1
-            style={{
-              fontWeight: 800,
-              lineHeight: 1.05,
-              backgroundImage: "linear-gradient(90deg, var(--foreground) 55%, #007BFF 100%)",
-              WebkitBackgroundClip: "text",
-              backgroundClip: "text",
-              color: "transparent",
-            }}
-            className="text-5xl md:text-6xl mb-5 tracking-tight"
+            style={{ fontWeight: 800, lineHeight: 1.05 }}
+            className="text-4xl md:text-5xl mb-5 tracking-tight flex items-center flex-wrap gap-3"
           >
-            {t.name}
+            <span className="text-muted-foreground font-semibold text-2xl md:text-3xl">{t.hiPrefix}</span>
+            <span className="inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary text-primary-foreground text-lg font-extrabold shrink-0 border-2 border-dashed border-primary/40 p-0.5">
+              <span className="w-full h-full rounded-full bg-primary flex items-center justify-center">FG</span>
+            </span>
+            <span
+              style={{
+                backgroundImage: "linear-gradient(90deg, var(--foreground) 55%, #007BFF 100%)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                color: "transparent",
+              }}
+            >
+              {t.name}!
+            </span>
           </h1>
+
           <p className="text-lg md:text-xl font-medium mb-3">{t.tagline}</p>
-          <p className="text-sm md:text-base mb-8 max-w-md text-muted-foreground">{t.sub}</p>
+          <p className="text-sm md:text-base mb-6 max-w-md text-muted-foreground">{t.sub}</p>
 
           <div className="flex flex-wrap items-center gap-3 mb-10">
             <MagneticButton
@@ -234,6 +286,10 @@ export default function Home() {
             <MagneticButton href="#work" className="chip px-5 py-3 rounded-xl text-sm font-semibold inline-flex text-foreground">
               {t.ctaWork}
             </MagneticButton>
+            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-2 text-xs font-semibold">
+              <span className="w-2 h-2 rounded-full" style={{ background: "#28C840" }} />
+              {t.badgeAvailable}
+            </span>
           </div>
 
           <div className="flex gap-8">
@@ -283,14 +339,7 @@ export default function Home() {
             </div>
           </TiltCard>
 
-          {/* floating bento badges */}
-          <div
-            style={{ animation: "float 5s ease-in-out infinite" }}
-            className="hidden md:flex absolute -bottom-6 -left-8 items-center gap-2 rounded-xl px-3 py-2 shadow-xl bg-card border border-border"
-          >
-            <span className="w-2 h-2 rounded-full" style={{ background: "#28C840" }} />
-            <span className="text-xs font-semibold">{t.badgeAvailable}</span>
-          </div>
+          {/* floating bento badge */}
           <div
             style={{ animation: "float 7s ease-in-out infinite" }}
             className="hidden md:flex absolute -top-5 -right-6 items-center gap-2 rounded-xl px-3 py-2 shadow-xl bg-card border border-border"
@@ -420,7 +469,6 @@ export default function Home() {
               <div>
                 <Input
                   type="text"
-                   id="from_name"
                   placeholder={t.formName}
                   value={form.name}
                   onChange={(e) => updateField("name", e.target.value)}
@@ -431,7 +479,6 @@ export default function Home() {
               <div>
                 <Input
                   type="email"
-                   id="from_email"
                   placeholder={t.formEmail}
                   value={form.email}
                   onChange={(e) => updateField("email", e.target.value)}

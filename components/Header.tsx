@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Sun, Moon, Tv, Menu, X } from "lucide-react";
+import { Sun, Moon, Sparkles, Menu, X } from "lucide-react";
 import { useSite } from "./SiteContext";
 import { Button } from "@/components/ui/button";
 import type { Locale, Theme } from "@/lib/types";
@@ -17,7 +17,7 @@ const LOCALES: { code: Locale; label: string }[] = [
 const THEMES: { code: Theme; icon: typeof Sun; label: string }[] = [
   { code: "light", icon: Sun, label: "light theme" },
   { code: "dark", icon: Moon, label: "dark theme" },
-  { code: "retro", icon: Tv, label: "retro theme" },
+  { code: "retro", icon: Sparkles, label: "retro theme" },
 ];
 
 export default function Header() {
@@ -48,34 +48,36 @@ export default function Header() {
         boxShadow: scrolled ? "0 1px 0 var(--border)" : "none",
       }}
     >
-      {/* three-column layout: logo left / nav truly centered / controls right */}
-      <div className="max-w-5xl mx-auto relative flex items-center justify-between px-6 py-4">
-        <Link href="/" className="flex items-center gap-2.5 shrink-0 group z-10">
-          <span className="font-mono text-lg font-extrabold tracking-tight text-primary transition-transform group-hover:-translate-y-0.5">
-            ／FG
+      <div className="max-w-5xl mx-auto flex items-center justify-between gap-4 px-6 py-4">
+        {/* Logo: rounded badge + name, no more of a bare monogram */}
+        <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
+          <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold text-sm shadow-sm transition-transform group-hover:-translate-y-0.5">
+            F
           </span>
-          <span className="hidden lg:block w-px h-4 bg-border" />
-          <span className="hidden lg:block text-xs font-medium tracking-wide text-muted-foreground">
-            {t.eyebrow}
+          <span className="hidden sm:flex flex-col leading-tight">
+            <span className="text-sm font-extrabold">{t.name}</span>
+            <span className="text-[10px] font-medium tracking-wide text-muted-foreground">{t.eyebrow}</span>
           </span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-7 text-sm font-medium absolute left-1/2 -translate-x-1/2">
+        {/* Nav as a single pill-shaped segmented control, echoing the lang/theme switchers */}
+        <nav className="hidden md:flex items-center gap-1 rounded-full border border-border bg-card p-1 mx-auto">
           {navItems.map((item) => {
             const active = pathname === item.href || (item.href === "/" && pathname === "/");
             return (
-              <Link key={item.href} href={item.href} className="relative py-1 group/link" style={{ color: active ? "var(--primary)" : "var(--muted-foreground)" }}>
-                {item.label}
+              <Link key={item.href} href={item.href}>
                 <span
-                  className="absolute left-0 -bottom-0.5 h-[2px] bg-primary transition-all duration-300 group-hover/link:w-full"
-                  style={{ width: active ? "100%" : "0%" }}
-                />
+                  className="block px-4 py-1.5 rounded-full text-xs font-semibold transition-all"
+                  style={active ? { background: "var(--primary)", color: "var(--primary-foreground)" } : { color: "var(--muted-foreground)" }}
+                >
+                  {item.label}
+                </span>
               </Link>
             );
           })}
         </nav>
 
-        <div className="flex items-center gap-3 z-10">
+        <div className="flex items-center gap-3 shrink-0">
           <div className="rounded-full hidden sm:flex items-center p-1 gap-1 border border-border bg-card">
             {LOCALES.map(({ code, label }) => (
               <Button
@@ -89,7 +91,7 @@ export default function Header() {
               </Button>
             ))}
           </div>
-          <div className="rounded-full flex items-center p-1 gap-1 border border-border bg-card">
+          <div className="rounded-full hidden sm:flex items-center p-1 gap-1 border border-border bg-card">
             {THEMES.map(({ code, icon: Icon, label }) => (
               <Button
                 key={code}
@@ -122,18 +124,34 @@ export default function Header() {
               {item.label}
             </Link>
           ))}
-          <div className="rounded-full flex items-center p-1 gap-1 w-fit sm:hidden border border-border bg-card">
-            {LOCALES.map(({ code, label }) => (
-              <Button
-                key={code}
-                size="sm"
-                variant={locale === code ? "default" : "ghost"}
-                className="h-7 px-3 rounded-full text-xs"
-                onClick={() => setLocale(code)}
-              >
-                {label}
-              </Button>
-            ))}
+          <div className="flex flex-wrap gap-2 pt-2">
+            <div className="rounded-full flex items-center p-1 gap-1 border border-border bg-card">
+              {LOCALES.map(({ code, label }) => (
+                <Button
+                  key={code}
+                  size="sm"
+                  variant={locale === code ? "default" : "ghost"}
+                  className="h-7 px-3 rounded-full text-xs"
+                  onClick={() => setLocale(code)}
+                >
+                  {label}
+                </Button>
+              ))}
+            </div>
+            <div className="rounded-full flex items-center p-1 gap-1 border border-border bg-card">
+              {THEMES.map(({ code, icon: Icon, label }) => (
+                <Button
+                  key={code}
+                  size="icon"
+                  variant={theme === code ? "default" : "ghost"}
+                  className="h-7 w-7"
+                  aria-label={label}
+                  onClick={() => setTheme(code)}
+                >
+                  <Icon size={13} />
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
       )}

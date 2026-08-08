@@ -54,26 +54,32 @@
   --ring: #007BFF;
 }
 
-/* Warm vintage-terminal palette — same #007BFF brand accent throughout */
+/* Retro poster / sticker palette — cream paper, bold outlines, pastel accent shapes.
+   Same #007BFF brand accent throughout; inspired by chunky Y2K repair-shop posters. */
 .retro {
-  --background: #EEE4CC;
-  --foreground: #2B2417;
-  --card: #F8F1DE;
-  --card-foreground: #2B2417;
-  --popover: #F8F1DE;
-  --popover-foreground: #2B2417;
+  --background: #F3ECD9;
+  --foreground: #221D14;
+  --card: #FFFDF7;
+  --card-foreground: #221D14;
+  --popover: #FFFDF7;
+  --popover-foreground: #221D14;
   --primary: #007BFF;
   --primary-foreground: #FFFFFF;
-  --secondary: #E9DCB8;
-  --secondary-foreground: #2B2417;
-  --muted: #E9DCB8;
-  --muted-foreground: #6E6248;
-  --accent: #E9DCB8;
-  --accent-foreground: #2B2417;
-  --destructive: #C1502E;
-  --border: #C9B98A;
-  --input: #C9B98A;
+  --secondary: #FCEAE0;
+  --secondary-foreground: #221D14;
+  --muted: #EFE4C8;
+  --muted-foreground: #7A6F55;
+  --accent: #D9F0E4;
+  --accent-foreground: #221D14;
+  --destructive: #E2554B;
+  --border: #221D14;
+  --input: #221D14;
   --ring: #007BFF;
+
+  /* Decorative starburst accent colors, used only in the hero */
+  --retro-mint: #8FD9B6;
+  --retro-coral: #FF8FA3;
+  --retro-orange: #FFB25E;
 }
 
 @theme inline {
@@ -114,14 +120,18 @@ section[id] {
   scroll-margin-top: 88px;
 }
 
-/* Retro theme: vintage terminal/typewriter headings, same brand blue throughout */
+/* Retro poster theme: chunky rounded headings, bold outlines everywhere, bubbly hover shadow */
 .retro h1,
 .retro h2 {
-  font-family: "Space Mono", "Vazirmatn", "Noto Sans KR", monospace;
+  font-family: "Baloo 2", "Vazirmatn", "Noto Sans KR", sans-serif;
   letter-spacing: -0.01em;
 }
 .retro .glow:hover {
-  box-shadow: 4px 4px 0 var(--primary);
+  box-shadow: 4px 4px 0 var(--retro-coral);
+}
+.retro [class*="border-border"],
+.retro .chip {
+  border-width: 2px;
 }
 
 @keyframes float {
@@ -151,6 +161,10 @@ section[id] {
 @keyframes toast-in {
   from { opacity: 0; transform: translate(-50%, 12px); }
   to { opacity: 1; transform: translate(-50%, 0); }
+}
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {

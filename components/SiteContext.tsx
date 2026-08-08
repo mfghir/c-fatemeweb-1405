@@ -26,7 +26,7 @@ export function SiteProvider({ children }: { children: React.ReactNode }) {
       const l = window.localStorage.getItem("fg-locale") as Locale | null;
       const th = window.localStorage.getItem("fg-theme") as Theme | null;
       if (l) setLocale(l);
-      if (th) setTheme(th);
+      if (th) setTheme(th === "anime" ? "retro" : th); // migrate anyone who had the old anime theme saved
     } catch {
       /* ignore */
     }
@@ -47,7 +47,7 @@ export function SiteProvider({ children }: { children: React.ReactNode }) {
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href =
-      "https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap";
+      "https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;900&family=Baloo+2:wght@500;600;700;800&display=swap";
     document.head.appendChild(link);
     return () => {
       document.head.removeChild(link);
@@ -69,18 +69,12 @@ export function SiteProvider({ children }: { children: React.ReactNode }) {
         <div
           className="pointer-events-none fixed inset-0 -z-30"
           style={{
-            opacity: isDark ? 0.05 : isRetro ? 0.09 : 0.025,
+            opacity: isDark ? 0.05 : isRetro ? 0.07 : 0.025,
             mixBlendMode: "overlay",
             backgroundImage:
               "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
           }}
         />
-        {isRetro && (
-          <div
-            className="pointer-events-none fixed inset-0 -z-30 opacity-[0.06]"
-            style={{ backgroundImage: "repeating-linear-gradient(0deg, #000 0px, #000 1px, transparent 1px, transparent 3px)" }}
-          />
-        )}
         {children}
       </div>
     </SiteContext.Provider>

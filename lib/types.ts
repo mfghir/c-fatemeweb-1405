@@ -27,6 +27,7 @@ export interface Copy {
   dir: "rtl" | "ltr";
   nav: { home: string; about: string; work: string; contact: string };
   eyebrow: string;
+  hiPrefix: string;
   name: string;
   tagline: string;
   sub: string;
