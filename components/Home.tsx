@@ -10,6 +10,8 @@ import Reveal from "./Reveal";
 import { DRIBBBLE_URL } from "./copy";
 import { Button } from "@/components/ui/button";
 import { SectionLabel, Starburst } from "./Decor";
+import ContactForm from "./ContactForm";
+import { Faq } from "./Faq";
 
 const EXPERTISE_ICONS = { research: Search, design: PenTool, system: Layers, handoff: GitBranch } as const;
 
@@ -92,11 +94,16 @@ export default function Home() {
           style={{ background: "#007BFF", opacity: isDark ? 0.18 : 0.12, animation: "blob 9s ease-in-out infinite" }}
           className="absolute w-72 h-72 rounded-full blur-3xl -top-10 -z-10"
         />
-        {isRetro && (
+        {isRetro ? (
           <>
             <Starburst color="var(--retro-mint)" size={90} style={{ top: -20, right: "38%", opacity: 0.9, animation: "spin-slow 22s linear infinite" }} />
             <Starburst color="var(--retro-coral)" size={54} style={{ bottom: 10, left: "2%", opacity: 0.85, animation: "spin-slow 18s linear infinite reverse" }} />
             <Starburst color="var(--retro-orange)" size={40} style={{ top: "45%", right: "4%", opacity: 0.8, animation: "spin-slow 15s linear infinite" }} />
+          </>
+        ) : (
+          <>
+            <Starburst color="#007BFF" size={56} style={{ top: -10, right: "36%", opacity: 0.16, animation: "spin-slow 24s linear infinite" }} />
+            <Starburst color="#007BFF" size={34} style={{ bottom: 6, left: "3%", opacity: 0.14, animation: "spin-slow 19s linear infinite reverse" }} />
           </>
         )}
 
@@ -298,6 +305,37 @@ export default function Home() {
               </Button>
             </div>
           )}
+        </section>
+      </Reveal>
+
+      {/* FAQ */}
+      <Reveal>
+        <section className="max-w-3xl mx-auto px-6 py-16 border-t border-border relative overflow-hidden">
+          {isRetro && (
+            <Starburst color="var(--retro-orange)" size={40} style={{ top: 10, right: "4%", opacity: 0.75, animation: "spin-slow 17s linear infinite" }} />
+          )}
+          <SectionLabel index="04">{t.faqEyebrow}</SectionLabel>
+          <h2 className="text-2xl md:text-3xl font-extrabold mb-10 max-w-2xl">{t.faqTitle}</h2>
+          <Faq items={t.faq} />
+        </section>
+      </Reveal>
+
+      {/* CONTACT — the full page lives at /contact; this is a lighter version so home doesn't dead-end at FAQ */}
+      <Reveal>
+        <section id="contact" className="max-w-3xl mx-auto px-6 py-16 border-t border-border relative overflow-hidden">
+          {isRetro && (
+            <Starburst color="var(--retro-coral)" size={44} style={{ bottom: 10, left: "2%", opacity: 0.75, animation: "spin-slow 16s linear infinite reverse" }} />
+          )}
+          <div className="flex items-end justify-between mb-8 flex-wrap gap-4">
+            <div>
+              <SectionLabel index="05">{t.linksEyebrow}</SectionLabel>
+              <h2 className="text-2xl md:text-3xl font-extrabold max-w-2xl">{t.linksTitle}</h2>
+            </div>
+            <Link href="/contact" className="text-sm font-semibold inline-flex items-center gap-1 shrink-0 text-primary">
+              {t.nav.contact} <ArrowUpRight size={14} />
+            </Link>
+          </div>
+          <ContactForm />
         </section>
       </Reveal>
     </div>

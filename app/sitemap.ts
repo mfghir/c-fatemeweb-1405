@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { SITE_URL } from "./layout";
+import { SITE_URL } from "@/lib/site";
 
 const PROJECTS_API = "https://new-personal-api.vercel.app";
 const PROJECTS_ENDPOINTS = ["PortfoliosData", "portfoliosdata", "projects", "works", "portfolio"];

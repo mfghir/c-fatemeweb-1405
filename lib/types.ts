@@ -23,6 +23,11 @@ export interface ProcessStep {
   d: string;
 }
 
+export interface FaqItem {
+  q: string;
+  a: string;
+}
+
 export interface Copy {
   dir: "rtl" | "ltr";
   nav: { home: string; about: string; work: string; contact: string };
@@ -68,8 +73,15 @@ export interface Copy {
   viewDribbble: string;
   linksEyebrow: string;
   linksTitle: string;
+  linksSub: string;
   portfolio: string;
   resume: string;
+  nextEyebrow: string;
+  nextTitle: string;
+  nextSteps: ProcessStep[];
+  faqEyebrow: string;
+  faqTitle: string;
+  faq: FaqItem[];
   formName: string;
   formEmail: string;
   formMsg: string;

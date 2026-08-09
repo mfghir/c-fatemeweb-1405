@@ -5,10 +5,8 @@ import { SiteProvider } from "@/components/SiteContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
+import { SITE_URL } from "@/lib/site";
 
-// Update this if the site's real domain changes — it feeds canonical URLs,
-// Open Graph/Twitter image URLs, and sitemap.ts / robots.ts.
-export const SITE_URL = "https://fatemeweb.netlify.app";
 const SITE_NAME = "Fateme Ghafari — UI/UX Designer";
 const SITE_DESCRIPTION =
   "UI/UX Designer portfolio. Research, UI design, design systems, and dev handoff — case studies, process, and contact. فارسی / English / 한국어.";
