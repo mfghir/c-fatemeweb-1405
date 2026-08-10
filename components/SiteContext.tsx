@@ -26,7 +26,7 @@ export function SiteProvider({ children }: { children: React.ReactNode }) {
       const l = window.localStorage.getItem("fg-locale") as Locale | null;
       const th = window.localStorage.getItem("fg-theme") as Theme | null;
       if (l) setLocale(l);
-      if (th) setTheme(th === "anime" ? "retro" : th); // migrate anyone who had the old anime theme saved
+      // if (th) setTheme(th === "anime" ? "retro" : th); // migrate anyone who had the old anime theme saved
     } catch {
       /* ignore */
     }
