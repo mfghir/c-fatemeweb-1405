@@ -9,7 +9,7 @@ import WorkCard from "./WorkCard";
 import Reveal from "./Reveal";
 import { DRIBBBLE_URL } from "./copy";
 import { Button } from "@/components/ui/button";
-import { SectionLabel, Starburst } from "./Decor";
+import { SectionLabel } from "./Decor";
 import ContactForm from "./ContactForm";
 import { Faq } from "./Faq";
 
@@ -69,7 +69,7 @@ function TiltCard({ children }: { children: React.ReactNode }) {
 }
 
 export default function Home() {
-  const { t, isDark, isRetro } = useSite();
+  const { t, isDark } = useSite();
   const [spot, setSpot] = useState({ x: 50, y: 30 });
   const projects = useProjects();
   const preview = Array.isArray(projects) ? projects.slice(0, 3) : null;
@@ -94,18 +94,14 @@ export default function Home() {
           style={{ background: "#007BFF", opacity: isDark ? 0.18 : 0.12, animation: "blob 9s ease-in-out infinite" }}
           className="absolute w-72 h-72 rounded-full blur-3xl -top-10 -z-10"
         />
-        {isRetro ? (
-          <>
-            <Starburst color="var(--retro-mint)" size={90} style={{ top: -20, right: "38%", opacity: 0.9, animation: "spin-slow 22s linear infinite" }} />
-            <Starburst color="var(--retro-coral)" size={54} style={{ bottom: 10, left: "2%", opacity: 0.85, animation: "spin-slow 18s linear infinite reverse" }} />
-            <Starburst color="var(--retro-orange)" size={40} style={{ top: "45%", right: "4%", opacity: 0.8, animation: "spin-slow 15s linear infinite" }} />
-          </>
-        ) : (
-          <>
-            <Starburst color="#007BFF" size={56} style={{ top: -10, right: "36%", opacity: 0.16, animation: "spin-slow 24s linear infinite" }} />
-            <Starburst color="#007BFF" size={34} style={{ bottom: 6, left: "3%", opacity: 0.14, animation: "spin-slow 19s linear infinite reverse" }} />
-          </>
-        )}
+        {/* Oversized faint wordmark behind the heading — the hero's signature touch */}
+        <span
+          aria-hidden
+          className="absolute select-none pointer-events-none font-extrabold whitespace-nowrap -z-10"
+          style={{ fontSize: "11rem", lineHeight: 1, top: "-1.5rem", insetInlineStart: "-0.5rem", color: "#007BFF", opacity: 0.06 }}
+        >
+          {t.name.split(" ")[0]}
+        </span>
 
         <div>
           <div className="flex items-center gap-2 mb-5">
@@ -113,31 +109,22 @@ export default function Home() {
             <span className="text-xs font-bold tracking-widest uppercase text-primary">{t.eyebrow}</span>
           </div>
 
+          <p className="text-lg md:text-xl font-semibold text-muted-foreground mb-1">{t.hiPrefix}</p>
           <h1
-            style={{ fontWeight: 800, lineHeight: 1.05 }}
-            className="text-4xl md:text-5xl mb-5 tracking-tight flex items-center flex-wrap gap-3"
+            style={{
+              fontWeight: 800,
+              lineHeight: 1.02,
+              backgroundImage: "linear-gradient(90deg, var(--foreground) 55%, #007BFF 100%)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              color: "transparent",
+            }}
+            className="text-5xl md:text-6xl mb-5 tracking-tight"
           >
-            <span className="text-muted-foreground font-semibold text-2xl md:text-3xl">{t.hiPrefix}</span>
-            <span
-              className="inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary text-primary-foreground text-lg font-extrabold shrink-0 border-2 border-dashed border-primary/40 p-0.5"
-              style={{ animation: "float 4s ease-in-out infinite" }}
-            >
-              <span className="w-full h-full rounded-full bg-primary flex items-center justify-center">FG</span>
-            </span>
-            <span
-              style={{
-                backgroundImage: "linear-gradient(90deg, var(--foreground) 55%, #007BFF 100%)",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                color: "transparent",
-              }}
-            >
-              {t.name}!
-            </span>
+            {t.name}
           </h1>
 
-          <p className="text-lg md:text-xl font-medium mb-3">{t.tagline}</p>
-          <p className="text-sm md:text-base mb-6 max-w-md text-muted-foreground">{t.sub}</p>
+          <p className="text-lg md:text-xl font-medium mb-8 max-w-md text-muted-foreground">{t.tagline}</p>
 
           <div className="flex flex-wrap items-center gap-3 mb-10">
             <MagneticButton
@@ -150,10 +137,6 @@ export default function Home() {
             <MagneticButton href="#work" className="chip px-5 py-3 rounded-xl text-sm font-semibold inline-flex text-foreground">
               {t.ctaWork}
             </MagneticButton>
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-2 text-xs font-semibold">
-              <span className="w-2 h-2 rounded-full" style={{ background: "#28C840", animation: "pulse-ring 2s ease-out infinite" }} />
-              {t.badgeAvailable}
-            </span>
           </div>
         </div>
 
@@ -192,7 +175,14 @@ export default function Home() {
             </div>
           </TiltCard>
 
-          {/* floating bento badge */}
+          {/* floating bento badges */}
+          <div
+            style={{ animation: "float 5s ease-in-out infinite" }}
+            className="hidden md:flex absolute -bottom-6 -left-8 items-center gap-2 rounded-xl px-3 py-2 shadow-xl bg-card border border-border"
+          >
+            <span className="w-2 h-2 rounded-full" style={{ background: "#28C840", animation: "pulse-ring 2s ease-out infinite" }} />
+            <span className="text-xs font-semibold">{t.badgeAvailable}</span>
+          </div>
           <div
             style={{ animation: "float 7s ease-in-out infinite" }}
             className="hidden md:flex absolute -top-5 -right-6 items-center gap-2 rounded-xl px-3 py-2 shadow-xl bg-card border border-border"
@@ -237,13 +227,41 @@ export default function Home() {
         </section>
       </Reveal>
 
+      {/* SERVICES teaser — links to the full pricing/services page */}
+      <Reveal>
+        <section className="max-w-5xl mx-auto px-6 py-16 border-t border-border">
+          <div className="flex items-end justify-between mb-6 flex-wrap gap-4">
+            <div className="flex-1 min-w-[200px]">
+              <SectionLabel index="02">{t.servicesEyebrow}</SectionLabel>
+              <h2 className="text-2xl md:text-3xl font-extrabold max-w-2xl mb-2">{t.servicesTitle}</h2>
+              <p className="text-sm text-muted-foreground max-w-md">{t.servicesTeaser}</p>
+            </div>
+            <Link href="/services" className="text-sm font-semibold inline-flex items-center gap-1 shrink-0 text-primary">
+              {t.seeServices} <ArrowUpRight size={14} />
+            </Link>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-5">
+            {t.services.map((service, i) => (
+              <Link
+                key={i}
+                href="/services"
+                className="group rounded-xl p-5 bg-card border border-border transition-all hover:-translate-y-1"
+              >
+                <h3 className="text-sm font-bold mb-2">{service.title}</h3>
+                <p className="text-xs leading-relaxed text-muted-foreground mb-3">{service.desc}</p>
+                <span className="text-xs font-semibold text-primary inline-flex items-center gap-1">
+                  {t.seeServices} <ArrowUpRight size={12} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </Reveal>
+
       {/* PROCESS */}
       <Reveal>
         <section className="max-w-5xl mx-auto px-6 py-16 border-t border-border relative overflow-hidden">
-          {isRetro && (
-            <Starburst color="var(--retro-mint)" size={46} style={{ top: 6, right: "6%", opacity: 0.8, animation: "spin-slow 20s linear infinite" }} />
-          )}
-          <SectionLabel index="02">{t.processEyebrow}</SectionLabel>
+          <SectionLabel index="03">{t.processEyebrow}</SectionLabel>
           <h2 className="text-2xl md:text-3xl font-extrabold mb-10 max-w-2xl">{t.processTitle}</h2>
           <div className="grid md:grid-cols-5 gap-4">
             {t.process.map((p, i) => (
@@ -265,7 +283,7 @@ export default function Home() {
         <section id="work" className="max-w-5xl mx-auto px-6 py-16 border-t border-border">
           <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
             <div className="flex-1 min-w-[200px]">
-              <SectionLabel index="03">{t.workEyebrow}</SectionLabel>
+              <SectionLabel index="04">{t.workEyebrow}</SectionLabel>
               <h2 className="text-2xl md:text-3xl font-extrabold max-w-2xl">{t.workTitle}</h2>
             </div>
             <Link href="/works" className="text-sm font-semibold inline-flex items-center gap-1 shrink-0 text-primary">
@@ -310,11 +328,8 @@ export default function Home() {
 
       {/* FAQ */}
       <Reveal>
-        <section className="max-w-3xl mx-auto px-6 py-16 border-t border-border relative overflow-hidden">
-          {isRetro && (
-            <Starburst color="var(--retro-orange)" size={40} style={{ top: 10, right: "4%", opacity: 0.75, animation: "spin-slow 17s linear infinite" }} />
-          )}
-          <SectionLabel index="04">{t.faqEyebrow}</SectionLabel>
+        <section className="max-w-3xl mx-auto px-6 py-16 border-t border-border">
+          <SectionLabel index="05">{t.faqEyebrow}</SectionLabel>
           <h2 className="text-2xl md:text-3xl font-extrabold mb-10 max-w-2xl">{t.faqTitle}</h2>
           <Faq items={t.faq} />
         </section>
@@ -322,13 +337,10 @@ export default function Home() {
 
       {/* CONTACT — the full page lives at /contact; this is a lighter version so home doesn't dead-end at FAQ */}
       <Reveal>
-        <section id="contact" className="max-w-3xl mx-auto px-6 py-16 border-t border-border relative overflow-hidden">
-          {isRetro && (
-            <Starburst color="var(--retro-coral)" size={44} style={{ bottom: 10, left: "2%", opacity: 0.75, animation: "spin-slow 16s linear infinite reverse" }} />
-          )}
+        <section id="contact" className="max-w-3xl mx-auto px-6 py-16 border-t border-border">
           <div className="flex items-end justify-between mb-8 flex-wrap gap-4">
             <div>
-              <SectionLabel index="05">{t.linksEyebrow}</SectionLabel>
+              <SectionLabel index="06">{t.linksEyebrow}</SectionLabel>
               <h2 className="text-2xl md:text-3xl font-extrabold max-w-2xl">{t.linksTitle}</h2>
             </div>
             <Link href="/contact" className="text-sm font-semibold inline-flex items-center gap-1 shrink-0 text-primary">

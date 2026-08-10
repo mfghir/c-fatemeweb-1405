@@ -13,14 +13,17 @@ const LOCALE_LABEL: Record<Locale, string> = { fa: "فارسی", en: "English", 
 const LOCALE_SHORT: Record<Locale, string> = { fa: "فا", en: "EN", ko: "한" };
 const LOCALES: Locale[] = ["fa", "en", "ko"];
 
-const THEMES: Theme[] = ["light", "dark", "retro"];
-const THEME_ICON: Record<Theme, typeof Sun> = { light: Sun, dark: Moon, retro: Sparkles };
+const THEMES: { code: Theme; icon: typeof Sun; label: string }[] = [
+  { code: "light", icon: Sun, label: "light theme" },
+  { code: "dark", icon: Moon, label: "dark theme" },
+  { code: "retro", icon: Sparkles, label: "retro theme" },
+];
 
-// Language as a proper dropdown (one compact control, opens on demand) + a single
-// borderless icon button that cycles the theme — no walls of always-visible buttons.
+// Language as a proper dropdown (one compact control, opens on demand). Theme
+// stays as all-visible icon buttons (not a hidden cycle) so people can see every
+// option at a glance.
 function PreferencesSwitcher() {
   const { locale, setLocale, theme, setTheme } = useSite();
-  const ThemeIcon = THEME_ICON[theme];
 
   return (
     <div className="flex items-center gap-1.5">
@@ -36,15 +39,20 @@ function PreferencesSwitcher() {
           ))}
         </SelectContent>
       </Select>
-      <Button
-        size="icon"
-        variant="ghost"
-        className="h-8 w-8 rounded-full transition-transform hover:scale-110 active:scale-90"
-        onClick={() => setTheme(THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length])}
-        aria-label="change theme"
-      >
-        <ThemeIcon size={15} className="text-primary" />
-      </Button>
+      <div className="flex items-center gap-1 rounded-full border border-border bg-card p-1">
+        {THEMES.map(({ code, icon: Icon, label }) => (
+          <Button
+            key={code}
+            size="icon"
+            variant={theme === code ? "default" : "ghost"}
+            className="h-6 w-6 rounded-full transition-transform hover:scale-110 active:scale-90"
+            aria-label={label}
+            onClick={() => setTheme(code)}
+          >
+            <Icon size={12} />
+          </Button>
+        ))}
+      </div>
     </div>
   );
 }
@@ -85,6 +93,7 @@ export default function Header() {
     { href: "/", label: t.nav.home },
     { href: "/about", label: t.nav.about },
     { href: "/works", label: t.nav.work },
+    { href: "/services", label: t.nav.services },
     { href: "/contact", label: t.nav.contact },
   ];
 

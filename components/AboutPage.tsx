@@ -2,22 +2,15 @@
 
 import { useSite } from "./SiteContext";
 import Reveal from "./Reveal";
-import { SectionLabel, Starburst } from "./Decor";
+import { SectionLabel } from "./Decor";
 import { IllustrationSlot } from "./IllustrationSlot";
 
 export default function AboutPage() {
-  const { t, isRetro } = useSite();
+  const { t } = useSite();
 
   return (
     <Reveal>
-      <section className="max-w-5xl mx-auto px-6 pt-16 pb-24 relative overflow-hidden">
-        {isRetro && (
-          <>
-            <Starburst color="var(--retro-mint)" size={60} style={{ top: 0, right: "4%", opacity: 0.85, animation: "spin-slow 20s linear infinite" }} />
-            <Starburst color="var(--retro-coral)" size={40} style={{ bottom: 10, left: "2%", opacity: 0.8, animation: "spin-slow 16s linear infinite reverse" }} />
-          </>
-        )}
-
+      <section className="max-w-5xl mx-auto px-6 pt-16 pb-24">
         <SectionLabel index="01">{t.aboutEyebrow}</SectionLabel>
 
         <div className="grid md:grid-cols-[1fr_260px] gap-10 items-start">

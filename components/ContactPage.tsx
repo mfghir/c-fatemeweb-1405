@@ -4,7 +4,7 @@ import { Github, Linkedin, Instagram, Send, Dribbble } from "lucide-react";
 import { useSite } from "./SiteContext";
 import Reveal from "./Reveal";
 import ContactForm from "./ContactForm";
-import { SectionLabel, Starburst } from "./Decor";
+import { SectionLabel } from "./Decor";
 import { IllustrationSlot } from "./IllustrationSlot";
 import { DRIBBBLE_URL } from "./copy";
 import { Button } from "@/components/ui/button";
@@ -18,15 +18,12 @@ const SOCIALS = [
 ];
 
 export default function ContactPage() {
-  const { t, isRetro } = useSite();
+  const { t } = useSite();
 
   return (
     <>
       <Reveal>
-        <section className="max-w-5xl mx-auto px-6 pt-16 pb-16 relative overflow-hidden">
-          {isRetro && (
-            <Starburst color="var(--retro-coral)" size={50} style={{ top: 0, left: "3%", opacity: 0.8, animation: "spin-slow 16s linear infinite reverse" }} />
-          )}
+        <section className="max-w-5xl mx-auto px-6 pt-16 pb-16">
           <SectionLabel index="01">{t.linksEyebrow}</SectionLabel>
           <h1 style={{ fontWeight: 800 }} className="text-3xl md:text-4xl mb-3 max-w-2xl">
             {t.linksTitle}

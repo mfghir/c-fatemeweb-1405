@@ -3,7 +3,7 @@ import type { Copy, Locale, Project } from "@/lib/types";
 export const COPY: Record<Locale, Copy> = {
   fa: {
     dir: "rtl",
-    nav: { home: "خانه", about: "درباره", work: "نمونه‌کارها", contact: "تماس" },
+    nav: { home: "خانه", about: "درباره", work: "نمونه‌کارها", services: "تعرفه", contact: "تماس" },
     eyebrow: "طراح UI/UX",
     hiPrefix: "سلام، من",
     name: "فاطمه غفاری",
@@ -28,6 +28,32 @@ export const COPY: Record<Locale, Copy> = {
       { icon: "system", t: "سیستم طراحی (Design System)", d: "کتابخانهٔ کامپوننت مقیاس‌پذیر برای هماهنگی تیم‌های چندنفره" },
       { icon: "handoff", t: "هندآف و همکاری با توسعه", d: "مستندسازی دقیق و هماهنگی مستقیم با تیم فرانت‌اند (React / Next.js)" },
     ],
+    servicesEyebrow: "تعرفه و خدمات",
+    servicesTitle: "چطور می‌تونیم همکاری کنیم",
+    servicesSub: "چند بستهٔ رایج — بسته به دامنهٔ واقعی پروژه‌ات با هم دقیق‌ترش می‌کنیم.",
+    servicesTeaser: "پکیج‌های طراحی، از یک مشاورهٔ کوتاه تا طراحی کامل محصول.",
+    seeServices: "مشاهدهٔ تعرفه و خدمات",
+    servicesPageTitle: "تعرفه و خدمات",
+    servicesPageSub: "این‌ها نقطهٔ شروع رایجن، نه قیمت ثابت — چون هر پروژه دامنهٔ خودش رو داره. بعد از شنیدن جزئیات کارت، یک برآورد واقعی و شفاف بهت می‌دم.",
+    servicesNote: "قیمت دقیق بعد از یک مکالمهٔ کوتاه دربارهٔ دامنهٔ پروژه مشخص می‌شه.",
+    services: [
+      {
+        title: "مشاورهٔ UX / بازبینی محصول",
+        desc: "بررسی یک محصول یا جریان موجود و ارائهٔ یک گزارش عملی از مشکلات و پیشنهادها.",
+        features: ["بازبینی heuristics", "یادداشت‌های قابلیت استفاده", "گزارش اولویت‌بندی‌شده"],
+      },
+      {
+        title: "طراحی UI/UX (وب یا اپ)",
+        desc: "از وایرفریم تا پروتوتایپ تعاملی با دقت پیکسلی، آمادهٔ هندآف به تیم توسعه.",
+        features: ["پژوهش کاربر", "وایرفریم و معماری اطلاعات", "پروتوتایپ تعاملی در فیگما"],
+      },
+      {
+        title: "سیستم طراحی",
+        desc: "کتابخانهٔ کامپوننت مقیاس‌پذیر که تیم‌های چندنفره رو هماهنگ نگه می‌داره.",
+        features: ["توکن‌های طراحی", "کتابخانهٔ کامپوننت در فیگما", "مستندسازی برای توسعه"],
+      },
+    ],
+    serviceCta: "درخواست قیمت",
     processEyebrow: "روند کار",
     processTitle: "از ایده تا هندآف",
     process: [
@@ -87,7 +113,7 @@ export const COPY: Record<Locale, Copy> = {
   },
   en: {
     dir: "ltr",
-    nav: { home: "Home", about: "About", work: "Work", contact: "Contact" },
+    nav: { home: "Home", about: "About", work: "Work", services: "Pricing", contact: "Contact" },
     eyebrow: "UI/UX Designer",
     hiPrefix: "Hi, I'm",
     name: "Fateme Ghafari",
@@ -112,6 +138,32 @@ export const COPY: Record<Locale, Copy> = {
       { icon: "system", t: "Design Systems", d: "Scalable component libraries that keep multi-person product teams aligned" },
       { icon: "handoff", t: "Handoff & Dev Collaboration", d: "Precise documentation and direct coordination with front-end teams (React / Next.js)" },
     ],
+    servicesEyebrow: "Pricing & Services",
+    servicesTitle: "Ways we can work together",
+    servicesSub: "A few common packages — scoped precisely once I know your actual project.",
+    servicesTeaser: "Design packages, from a quick consult to full product design.",
+    seeServices: "See pricing & services",
+    servicesPageTitle: "Pricing & Services",
+    servicesPageSub: "These are common starting points, not fixed prices — every project's scope is different. Once I hear the details, I'll give you a realistic, transparent estimate.",
+    servicesNote: "Exact pricing is worked out after a short conversation about project scope.",
+    services: [
+      {
+        title: "UX Consultation / Audit",
+        desc: "A review of an existing product or flow, with an actionable report on what's working and what isn't.",
+        features: ["Heuristic review", "Usability notes", "Prioritized report"],
+      },
+      {
+        title: "UI/UX Design (Web or App)",
+        desc: "From wireframes to pixel-accurate interactive prototypes, ready for dev handoff.",
+        features: ["User research", "Wireframes & information architecture", "Interactive prototype in Figma"],
+      },
+      {
+        title: "Design System",
+        desc: "A scalable component library that keeps multi-person teams aligned.",
+        features: ["Design tokens", "Component library in Figma", "Documentation for developers"],
+      },
+    ],
+    serviceCta: "Request a quote",
     processEyebrow: "Process",
     processTitle: "From idea to handoff",
     process: [
@@ -171,7 +223,7 @@ export const COPY: Record<Locale, Copy> = {
   },
   ko: {
     dir: "ltr",
-    nav: { home: "홈", about: "소개", work: "작업", contact: "연락처" },
+    nav: { home: "홈", about: "소개", work: "작업", services: "요금", contact: "연락처" },
     eyebrow: "UI/UX 디자이너",
     hiPrefix: "안녕하세요, 저는",
     name: "Fateme Ghafari",
@@ -196,6 +248,32 @@ export const COPY: Record<Locale, Copy> = {
       { icon: "system", t: "디자인 시스템", d: "여러 명이 함께 작업하는 제품 팀을 위한 확장 가능한 컴포넌트 라이브러리" },
       { icon: "handoff", t: "핸드오프 & 개발 협업", d: "정확한 문서화와 프론트엔드 팀(React / Next.js)과의 직접적인 협업" },
     ],
+    servicesEyebrow: "요금 & 서비스",
+    servicesTitle: "함께 일하는 방법",
+    servicesSub: "몇 가지 대표적인 패키지입니다 — 실제 프로젝트 내용을 들은 뒤 정확히 범위를 정합니다.",
+    servicesTeaser: "간단한 컨설팅부터 전체 제품 디자인까지, 디자인 패키지를 소개합니다.",
+    seeServices: "요금 & 서비스 보기",
+    servicesPageTitle: "요금 & 서비스",
+    servicesPageSub: "아래는 고정 가격이 아니라 일반적인 시작점입니다 — 프로젝트마다 범위가 다르기 때문입니다. 자세한 내용을 들은 후 현실적이고 투명한 견적을 드립니다.",
+    servicesNote: "정확한 가격은 프로젝트 범위에 대한 짧은 대화 후에 정해집니다.",
+    services: [
+      {
+        title: "UX 컨설팅 / 진단",
+        desc: "기존 제품이나 플로우를 검토하고, 실행 가능한 개선 리포트를 제공합니다.",
+        features: ["휴리스틱 검토", "사용성 노트", "우선순위가 정리된 리포트"],
+      },
+      {
+        title: "UI/UX 디자인 (웹 또는 앱)",
+        desc: "와이어프레임부터 픽셀 단위의 인터랙티브 프로토타입까지, 개발 핸드오프 준비 완료.",
+        features: ["사용자 리서치", "와이어프레임 & 정보 구조", "Figma 인터랙티브 프로토타입"],
+      },
+      {
+        title: "디자인 시스템",
+        desc: "여러 명이 함께 작업하는 팀을 위한 확장 가능한 컴포넌트 라이브러리.",
+        features: ["디자인 토큰", "Figma 컴포넌트 라이브러리", "개발자를 위한 문서화"],
+      },
+    ],
+    serviceCta: "견적 요청하기",
     processEyebrow: "작업 방식",
     processTitle: "아이디어에서 핸드오프까지",
     process: [

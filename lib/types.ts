@@ -28,9 +28,15 @@ export interface FaqItem {
   a: string;
 }
 
+export interface ServiceItem {
+  title: string;
+  desc: string;
+  features: string[];
+}
+
 export interface Copy {
   dir: "rtl" | "ltr";
-  nav: { home: string; about: string; work: string; contact: string };
+  nav: { home: string; about: string; work: string; services: string; contact: string };
   eyebrow: string;
   hiPrefix: string;
   name: string;
@@ -49,6 +55,16 @@ export interface Copy {
   expertiseEyebrow: string;
   expertiseTitle: string;
   expertise: ExpertiseItem[];
+  servicesEyebrow: string;
+  servicesTitle: string;
+  servicesSub: string;
+  servicesTeaser: string;
+  seeServices: string;
+  servicesPageTitle: string;
+  servicesPageSub: string;
+  servicesNote: string;
+  services: ServiceItem[];
+  serviceCta: string;
   processEyebrow: string;
   processTitle: string;
   process: ProcessStep[];
