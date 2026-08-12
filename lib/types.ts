@@ -1,4 +1,4 @@
-export type Locale = "fa" | "en" | "ko";
+export type Locale = "fa" | "en";
 export type Theme = "light" | "dark" | "retro";
 
 export interface Project {
@@ -36,7 +36,7 @@ export interface ServiceItem {
 
 export interface Copy {
   dir: "rtl" | "ltr";
-  nav: { home: string; about: string; work: string; services: string; contact: string };
+  nav: { home: string; about: string; work: string; services: string; resume: string; contact: string };
   eyebrow: string;
   hiPrefix: string;
   name: string;
@@ -92,6 +92,13 @@ export interface Copy {
   linksSub: string;
   portfolio: string;
   resume: string;
+  resumePageTitle: string;
+  resumePageSub: string;
+  resumeCardTitle: string;
+  resumeCardDesc: string;
+  portfolioCardTitle: string;
+  portfolioCardDesc: string;
+  viewOpen: string;
   nextEyebrow: string;
   nextTitle: string;
   nextSteps: ProcessStep[];

@@ -9,7 +9,7 @@ import { SITE_URL } from "@/lib/site";
 
 const SITE_NAME = "Fateme Ghafari — UI/UX Designer";
 const SITE_DESCRIPTION =
-  "UI/UX Designer portfolio. Research, UI design, design systems, and dev handoff — case studies, process, and contact. فارسی / English / 한국어.";
+  "UI/UX Designer portfolio. Research, UI design, design systems, and dev handoff — case studies, process, and contact. فارسی / English.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

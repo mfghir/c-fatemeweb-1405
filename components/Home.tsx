@@ -73,6 +73,9 @@ export default function Home() {
   const [spot, setSpot] = useState({ x: 50, y: 30 });
   const projects = useProjects();
   const preview = Array.isArray(projects) ? projects.slice(0, 3) : null;
+  const heroPicks = Array.isArray(projects)
+    ? projects.filter((p) => (p.tags || []).some((tg) => ["ui", "ux"].includes(tg.toLowerCase()))).slice(0, 3)
+    : [];
 
   return (
     <div onMouseMove={(e) => setSpot({ x: (e.clientX / window.innerWidth) * 100, y: (e.clientY / window.innerHeight) * 100 })}>
@@ -149,29 +152,45 @@ export default function Home() {
                 <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#28C840" }} />
                 <span className="text-xs ml-2 text-muted-foreground">{t.canvasTitle}</span>
               </div>
-              <div className="flex">
-                <div className="w-1/3 p-3 space-y-2" style={{ borderInlineEnd: "1px solid var(--border)" }}>
-                  {t.layers.map((l, i) => (
-                    <div key={i} className="rounded-md px-2 py-1.5 text-[10px] bg-muted">
-                      {l}
-                    </div>
+              {heroPicks.length > 0 ? (
+                <div className={`grid gap-1 p-1 ${heroPicks.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}>
+                  {heroPicks.map((p, i) => (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      key={p.id}
+                      src={p.image ?? undefined}
+                      alt={p.title}
+                      referrerPolicy="no-referrer"
+                      loading="lazy"
+                      className={`w-full object-cover rounded-lg ${heroPicks.length === 3 && i === 0 ? "col-span-2 h-32" : "h-28"}`}
+                    />
                   ))}
                 </div>
-                <div className="w-2/3 p-4 space-y-3 relative">
-                  <div className="h-10 rounded-lg opacity-90 bg-primary" />
-                  <div className="h-16 rounded-lg bg-muted" />
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="h-14 rounded-lg bg-muted" />
-                    <div className="h-14 rounded-lg bg-muted" />
+              ) : (
+                <div className="flex">
+                  <div className="w-1/3 p-3 space-y-2" style={{ borderInlineEnd: "1px solid var(--border)" }}>
+                    {t.layers.map((l, i) => (
+                      <div key={i} className="rounded-md px-2 py-1.5 text-[10px] bg-muted">
+                        {l}
+                      </div>
+                    ))}
                   </div>
-                  <MousePointer2
-                    size={18}
-                    color="#007BFF"
-                    fill="#007BFF"
-                    style={{ position: "absolute", bottom: 10, right: 10, animation: "pulse-cursor 2.2s ease-in-out infinite" }}
-                  />
+                  <div className="w-2/3 p-4 space-y-3 relative">
+                    <div className="h-10 rounded-lg opacity-90 bg-primary" />
+                    <div className="h-16 rounded-lg bg-muted" />
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="h-14 rounded-lg bg-muted" />
+                      <div className="h-14 rounded-lg bg-muted" />
+                    </div>
+                    <MousePointer2
+                      size={18}
+                      color="#007BFF"
+                      fill="#007BFF"
+                      style={{ position: "absolute", bottom: 10, right: 10, animation: "pulse-cursor 2.2s ease-in-out infinite" }}
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </TiltCard>
 

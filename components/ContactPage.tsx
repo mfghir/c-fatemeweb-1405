@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Github, Linkedin, Instagram, Send, Dribbble } from "lucide-react";
 import { useSite } from "./SiteContext";
 import Reveal from "./Reveal";
@@ -50,14 +51,10 @@ export default function ContactPage() {
                 ))}
                 <div className="flex gap-3 mt-2">
                   <Button asChild size="sm" className="glow">
-                    <a href="https://drive.google.com/file/d/1ugC7JBKZOI9KCcHXvi2Af3Z9sLGNnN99/view" target="_blank" rel="noreferrer">
-                      {t.portfolio}
-                    </a>
+                    <Link href="/resume">{t.portfolio}</Link>
                   </Button>
                   <Button asChild size="sm" variant="chip">
-                    <a href="https://drive.google.com/file/d/1Y-IDqm0XzE8ZHQ5RYenzURBhgYBcxd4e/view" target="_blank" rel="noreferrer">
-                      {t.resume}
-                    </a>
+                    <Link href="/resume">{t.resume}</Link>
                   </Button>
                 </div>
               </div>

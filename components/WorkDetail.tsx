@@ -7,6 +7,7 @@ import { ArrowRight, ExternalLink, Github, Dribbble } from "lucide-react";
 import { useSite } from "./SiteContext";
 import { useProjects } from "./useProjects";
 import { WORK_TINTS, DRIBBBLE_URL } from "./copy";
+import { isDriveLink, toDrivePreview } from "@/lib/drive";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -98,7 +99,7 @@ export default function WorkDetail() {
         {project.desc || t.detailDescPlaceholder}
       </p>
 
-      <div className="flex flex-wrap gap-3 mb-16">
+      <div className="flex flex-wrap gap-3 mb-8">
         {project.onlineLink && (
           <Button asChild className="glow">
             <a href={project.onlineLink} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2">
@@ -119,6 +120,18 @@ export default function WorkDetail() {
           </a>
         </Button>
       </div>
+
+      {/* Case studies whose link is a Google Drive file (like the resume) open right
+          here on the page instead of sending the visitor away to Drive. */}
+      {isDriveLink(project.onlineLink) && (
+        <iframe
+          src={toDrivePreview(project.onlineLink as string)}
+          className="w-full rounded-2xl border border-border mb-16"
+          style={{ height: "75vh", minHeight: 420 }}
+          allow="autoplay"
+          title={project.title}
+        />
+      )}
 
       {(prev || next) && (
         <div className="grid grid-cols-2 gap-4 pt-8 border-t border-border">

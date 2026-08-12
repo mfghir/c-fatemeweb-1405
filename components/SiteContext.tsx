@@ -25,8 +25,8 @@ export function SiteProvider({ children }: { children: React.ReactNode }) {
     try {
       const l = window.localStorage.getItem("fg-locale") as Locale | null;
       const th = window.localStorage.getItem("fg-theme") as Theme | null;
-      if (l) setLocale(l);
-      // if (th) setTheme(th === "anime" ? "retro" : th); // migrate anyone who had the old anime theme saved
+      if (l === "fa" || l === "en") setLocale(l);
+      if (th) setTheme(th === "anime" ? "retro" : th); // migrate anyone who had the old anime theme saved
     } catch {
       /* ignore */
     }
@@ -47,7 +47,7 @@ export function SiteProvider({ children }: { children: React.ReactNode }) {
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href =
-      "https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;900&family=Baloo+2:wght@500;600;700;800&display=swap";
+      "https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&family=Baloo+2:wght@500;600;700;800&display=swap";
     document.head.appendChild(link);
     return () => {
       document.head.removeChild(link);

@@ -1,17 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Sun, Moon, Sparkles, Menu, X } from "lucide-react";
 import { useSite } from "./SiteContext";
+import { useProjects } from "./useProjects";
 import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import type { Locale, Theme } from "@/lib/types";
 
-const LOCALE_LABEL: Record<Locale, string> = { fa: "فارسی", en: "English", ko: "한국어" };
-const LOCALE_SHORT: Record<Locale, string> = { fa: "فا", en: "EN", ko: "한" };
-const LOCALES: Locale[] = ["fa", "en", "ko"];
+const LOCALE_LABEL: Record<Locale, string> = { fa: "فارسی", en: "English" };
+const LOCALE_SHORT: Record<Locale, string> = { fa: "فا", en: "EN" };
+const LOCALES: Locale[] = ["fa", "en"];
 
 const THEMES: { code: Theme; icon: typeof Sun; label: string }[] = [
   { code: "light", icon: Sun, label: "light theme" },
@@ -57,6 +58,36 @@ function PreferencesSwitcher() {
   );
 }
 
+// A few real design thumbnails (tagged "ui" or "ux" in the API), shown as a
+// small overlapping stack next to the logo — kept tiny so the header stays
+// uncluttered, but gives visitors an instant visual taste of the work.
+function HeaderShowcase() {
+  const projects = useProjects();
+
+  const picks = useMemo(() => {
+    if (!Array.isArray(projects)) return [];
+    return projects.filter((p) => p.image && p.tags?.some((tg) => /ui|ux/i.test(tg))).slice(0, 3);
+  }, [projects]);
+
+  if (picks.length === 0) return null;
+
+  return (
+    <Link href="/works" className="hidden lg:flex items-center -space-x-2 rtl:space-x-reverse shrink-0" aria-label="see work">
+      {picks.map((p, i) => (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          key={p.id}
+          src={p.image as string}
+          alt={p.title}
+          referrerPolicy="no-referrer"
+          className="w-7 h-7 rounded-full object-cover border-2 border-background shadow-sm transition-transform hover:-translate-y-0.5"
+          style={{ zIndex: 10 - i }}
+        />
+      ))}
+    </Link>
+  );
+}
+
 // Three-letter monogram (F · G · H) as a small cluster of overlapping circles —
 // a playful mark instead of a single flat badge.
 function Logo() {
@@ -94,6 +125,7 @@ export default function Header() {
     { href: "/about", label: t.nav.about },
     { href: "/works", label: t.nav.work },
     { href: "/services", label: t.nav.services },
+    { href: "/resume", label: t.nav.resume },
     { href: "/contact", label: t.nav.contact },
   ];
 
@@ -111,6 +143,8 @@ export default function Header() {
           <Logo />
           <span className="hidden sm:block text-sm font-extrabold">{t.name}</span>
         </Link>
+
+        <HeaderShowcase />
 
         {/* Nav: plain text links, active one underlined — no filled pill container */}
         <nav className="hidden md:flex items-center gap-6 mx-auto">
