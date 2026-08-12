@@ -3,14 +3,17 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { WORK_TINTS } from "./copy";
+import { WORK_TINTS, projectDesc } from "./copy";
 import { Badge } from "@/components/ui/badge";
+import { useSite } from "./SiteContext";
 import type { Project } from "@/lib/types";
 
 export default function WorkCard({ project, index }: { project: Project; index: number }) {
+  const { locale } = useSite();
   const tint = WORK_TINTS[index % WORK_TINTS.length];
   const [imgFailed, setImgFailed] = useState(false);
   const showImage = Boolean(project.image) && !imgFailed;
+  const desc = projectDesc(project, locale);
 
   return (
     <Link
@@ -47,8 +50,8 @@ export default function WorkCard({ project, index }: { project: Project; index: 
           <h3 className="font-bold text-base">{project.title}</h3>
           <ArrowRight size={16} className="work-arrow opacity-0 transition-all" style={{ color: tint }} />
         </div>
-        {project.desc && (
-          <p className="text-xs mt-2 leading-relaxed text-muted-foreground">{project.desc}</p>
+        {desc && (
+          <p className="text-xs mt-2 leading-relaxed text-muted-foreground">{desc}</p>
         )}
         {project.tags && project.tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mt-3">

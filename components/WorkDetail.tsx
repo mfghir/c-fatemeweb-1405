@@ -6,13 +6,13 @@ import Link from "next/link";
 import { ArrowRight, ExternalLink, Github, Dribbble } from "lucide-react";
 import { useSite } from "./SiteContext";
 import { useProjects } from "./useProjects";
-import { WORK_TINTS, DRIBBBLE_URL } from "./copy";
+import { WORK_TINTS, DRIBBBLE_URL, projectDesc } from "./copy";
 import { isDriveLink, toDrivePreview } from "@/lib/drive";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 export default function WorkDetail() {
-  const { t } = useSite();
+  const { t, locale } = useSite();
   const params = useParams<{ id: string }>();
   const projects = useProjects();
   const [imgFailed, setImgFailed] = useState(false);
@@ -48,6 +48,7 @@ export default function WorkDetail() {
 
   const prev = projects[index - 1];
   const next = projects[index + 1];
+  const desc = projectDesc(project, locale);
 
   return (
     <article className="max-w-3xl mx-auto px-6 pt-12 pb-24">
@@ -95,8 +96,8 @@ export default function WorkDetail() {
       )}
 
       {/* Reserved space for the case-study write-up — shows a placeholder until the API has real text. */}
-      <p className="text-base leading-relaxed mb-8 max-w-2xl text-muted-foreground" style={{ opacity: project.desc ? 1 : 0.6 }}>
-        {project.desc || t.detailDescPlaceholder}
+      <p className="text-base leading-relaxed mb-8 max-w-2xl text-muted-foreground" style={{ opacity: desc ? 1 : 0.6 }}>
+        {desc || t.detailDescPlaceholder}
       </p>
 
       <div className="flex flex-wrap gap-3 mb-8">

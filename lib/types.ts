@@ -5,6 +5,8 @@ export interface Project {
   id: string | number;
   title: string;
   desc: string;
+  descFa: string;
+  descEn: string;
   category: string;
   tags: string[];
   image: string | null;

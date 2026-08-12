@@ -7,7 +7,7 @@ import { useSite } from "./SiteContext";
 import { useProjects } from "./useProjects";
 import WorkCard from "./WorkCard";
 import Reveal from "./Reveal";
-import { DRIBBBLE_URL } from "./copy";
+import { DRIBBBLE_URL, projectDesc } from "./copy";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -26,7 +26,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 export default function WorksPage() {
-  const { t } = useSite();
+  const { t, locale } = useSite();
   const projects = useProjects();
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [query, setQuery] = useState("");
@@ -45,11 +45,11 @@ export default function WorksPage() {
       const matchesQuery =
         !q ||
         p.title.toLowerCase().includes(q) ||
-        (p.desc || "").toLowerCase().includes(q) ||
+        projectDesc(p, locale).toLowerCase().includes(q) ||
         (p.tags || []).some((tg) => tg.toLowerCase().includes(q));
       return matchesTag && matchesQuery;
     });
-  }, [projects, activeTag, query]);
+  }, [projects, activeTag, query, locale]);
 
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);

@@ -7,10 +7,8 @@ import { Sun, Moon, Sparkles, Menu, X } from "lucide-react";
 import { useSite } from "./SiteContext";
 import { useProjects } from "./useProjects";
 import { Button } from "@/components/ui/button";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import type { Locale, Theme } from "@/lib/types";
 
-const LOCALE_LABEL: Record<Locale, string> = { fa: "فارسی", en: "English" };
 const LOCALE_SHORT: Record<Locale, string> = { fa: "فا", en: "EN" };
 const LOCALES: Locale[] = ["fa", "en"];
 
@@ -20,26 +18,27 @@ const THEMES: { code: Theme; icon: typeof Sun; label: string }[] = [
   { code: "retro", icon: Sparkles, label: "retro theme" },
 ];
 
-// Language as a proper dropdown (one compact control, opens on demand). Theme
-// stays as all-visible icon buttons (not a hidden cycle) so people can see every
-// option at a glance.
+// Language and theme now share the exact same visual treatment: a row of
+// always-visible small buttons in one bordered pill, so every option is
+// visible at a glance for both.
 function PreferencesSwitcher() {
   const { locale, setLocale, theme, setTheme } = useSite();
 
   return (
     <div className="flex items-center gap-1.5">
-      <Select value={locale} onValueChange={(v) => setLocale(v as Locale)}>
-        <SelectTrigger className="h-8 w-auto gap-1.5 rounded-full border-border bg-card px-3 py-0 text-xs font-semibold">
-          <SelectValue>{LOCALE_SHORT[locale]}</SelectValue>
-        </SelectTrigger>
-        <SelectContent align="end">
-          {LOCALES.map((code) => (
-            <SelectItem key={code} value={code}>
-              {LOCALE_LABEL[code]}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <div className="flex items-center gap-1 rounded-full border border-border bg-card p-1">
+        {LOCALES.map((code) => (
+          <Button
+            key={code}
+            size="sm"
+            variant={locale === code ? "default" : "ghost"}
+            className="h-6 px-2.5 rounded-full text-[11px] font-semibold"
+            onClick={() => setLocale(code)}
+          >
+            {LOCALE_SHORT[code]}
+          </Button>
+        ))}
+      </div>
       <div className="flex items-center gap-1 rounded-full border border-border bg-card p-1">
         {THEMES.map(({ code, icon: Icon, label }) => (
           <Button

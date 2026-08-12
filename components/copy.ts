@@ -261,12 +261,26 @@ export const PROJECTS_ENDPOINTS = ["PortfoliosData", "portfoliosdata", "projects
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function normalizeProject(item: any, i: number): Project {
+  // A single non-localized field (works today, before you've split it by language).
+  const sharedDesc = item.description || item.desc || item.summary || item.subtitle || "";
+
+  // Once you add language-specific fields to the API, any of these common naming
+  // styles will be picked up automatically — no site code changes needed:
+  //   description_fa / descriptionFa / desc_fa / descFa
+  //   description_en / descriptionEn / desc_en / descEn
+  const descFa =
+    item.description_fa || item.descriptionFa || item.desc_fa || item.descFa || sharedDesc;
+  const descEn =
+    item.description_en || item.descriptionEn || item.desc_en || item.descEn || sharedDesc;
+
   return {
     id: item.id ?? i,
     title: item.title || item.name || item.projectName || `Project ${i + 1}`,
     // Reserved for the case-study write-up you're planning to add to the API later —
     // works today with any of these field names, and simply stays hidden until filled in.
-    desc: item.description || item.desc || item.summary || item.subtitle || "",
+    desc: sharedDesc,
+    descFa,
+    descEn,
     category: item.category || item.tag || item.type || item.role || "",
     tags: Array.isArray(item.tags) ? item.tags : [],
     image: item.imgUrl || item.image || item.thumbnail || item.img || item.cover || item.thumbnailUrl || null,
@@ -276,3 +290,8 @@ export function normalizeProject(item: any, i: number): Project {
 }
 
 export const WORK_TINTS = ["#007BFF", "#0B63C9", "#3D9CFF", "#6B7280", "#2563EB", "#4C8DFF", "#60A5FA", "#1D4ED8"];
+
+/** Picks the project description matching the active site language. */
+export function projectDesc(project: Project, locale: Locale): string {
+  return (locale === "fa" ? project.descFa : project.descEn) || project.desc;
+}
