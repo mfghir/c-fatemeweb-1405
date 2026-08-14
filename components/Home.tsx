@@ -10,6 +10,7 @@ import Reveal from "./Reveal";
 import { DRIBBBLE_URL } from "./copy";
 import { Button } from "@/components/ui/button";
 import { SectionLabel } from "./Decor";
+import HeroShowcase from "./HeroShowcase";
 import ContactForm from "./ContactForm";
 import { Faq } from "./Faq";
 
@@ -73,9 +74,11 @@ export default function Home() {
   const [spot, setSpot] = useState({ x: 50, y: 30 });
   const projects = useProjects();
   const preview = Array.isArray(projects) ? projects.slice(0, 3) : null;
-  const heroPicks = Array.isArray(projects)
-    ? projects.filter((p) => (p.tags || []).some((tg) => ["ui", "ux"].includes(tg.toLowerCase()))).slice(0, 3)
+  const uiUxPicks = Array.isArray(projects)
+    ? projects.filter((p) => (p.tags || []).some((tg) => ["ui", "ux"].includes(tg.toLowerCase())))
     : [];
+  // Falls back to all projects if too few are tagged "ui"/"ux" — a slider needs enough cards to be worth having.
+  const heroPicks = (uiUxPicks.length >= 3 ? uiUxPicks : Array.isArray(projects) ? projects : []).slice(0, 8);
 
   return (
     <div onMouseMove={(e) => setSpot({ x: (e.clientX / window.innerWidth) * 100, y: (e.clientY / window.innerHeight) * 100 })}>
@@ -144,29 +147,17 @@ export default function Home() {
         </div>
 
         <div className="relative">
-          <TiltCard>
-            <div className="rounded-2xl shadow-2xl overflow-hidden bg-card border border-border">
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
-                <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#FF5F57" }} />
-                <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#FEBC2E" }} />
-                <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#28C840" }} />
-                <span className="text-xs ml-2 text-muted-foreground">{t.canvasTitle}</span>
-              </div>
-              {heroPicks.length > 0 ? (
-                <div className={`grid gap-1 p-1 ${heroPicks.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}>
-                  {heroPicks.map((p, i) => (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      key={p.id}
-                      src={p.image ?? undefined}
-                      alt={p.title}
-                      referrerPolicy="no-referrer"
-                      loading="lazy"
-                      className={`w-full object-cover rounded-lg ${heroPicks.length === 3 && i === 0 ? "col-span-2 h-32" : "h-28"}`}
-                    />
-                  ))}
+          {heroPicks.length > 0 ? (
+            <HeroShowcase projects={heroPicks} />
+          ) : (
+            <TiltCard>
+              <div className="rounded-2xl shadow-2xl overflow-hidden bg-card border border-border">
+                <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
+                  <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#FF5F57" }} />
+                  <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#FEBC2E" }} />
+                  <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#28C840" }} />
+                  <span className="text-xs ml-2 text-muted-foreground">{t.canvasTitle}</span>
                 </div>
-              ) : (
                 <div className="flex">
                   <div className="w-1/3 p-3 space-y-2" style={{ borderInlineEnd: "1px solid var(--border)" }}>
                     {t.layers.map((l, i) => (
@@ -190,9 +181,9 @@ export default function Home() {
                     />
                   </div>
                 </div>
-              )}
-            </div>
-          </TiltCard>
+              </div>
+            </TiltCard>
+          )}
 
           {/* floating bento badges */}
           <div

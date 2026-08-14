@@ -6,14 +6,16 @@ import { ArrowRight } from "lucide-react";
 import { WORK_TINTS, projectDesc } from "./copy";
 import { Badge } from "@/components/ui/badge";
 import { useSite } from "./SiteContext";
+import { isDriveLink } from "@/lib/drive";
 import type { Project } from "@/lib/types";
 
 export default function WorkCard({ project, index }: { project: Project; index: number }) {
-  const { locale } = useSite();
+  const { t, locale } = useSite();
   const tint = WORK_TINTS[index % WORK_TINTS.length];
   const [imgFailed, setImgFailed] = useState(false);
   const showImage = Boolean(project.image) && !imgFailed;
   const desc = projectDesc(project, locale);
+  const bucketLabel = isDriveLink(project.onlineLink) ? t.filterCaseStudy : t.filterUiUx;
 
   return (
     <Link
@@ -41,11 +43,9 @@ export default function WorkCard({ project, index }: { project: Project; index: 
         )}
       </div>
       <div className="p-5">
-        {project.category && (
-          <div style={{ color: tint }} className="text-[11px] font-bold uppercase tracking-wide mb-2">
-            {project.category}
-          </div>
-        )}
+        <div style={{ color: tint }} className="text-[11px] font-bold uppercase tracking-wide mb-2">
+          {bucketLabel}
+        </div>
         <div className="flex items-center justify-between gap-2">
           <h3 className="font-bold text-base">{project.title}</h3>
           <ArrowRight size={16} className="work-arrow opacity-0 transition-all" style={{ color: tint }} />

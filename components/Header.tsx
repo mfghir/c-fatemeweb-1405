@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Sun, Moon, Sparkles, Menu, X } from "lucide-react";
 import { useSite } from "./SiteContext";
-import { useProjects } from "./useProjects";
 import { Button } from "@/components/ui/button";
 import type { Locale, Theme } from "@/lib/types";
 
@@ -57,51 +56,15 @@ function PreferencesSwitcher() {
   );
 }
 
-// A few real design thumbnails (tagged "ui" or "ux" in the API), shown as a
-// small overlapping stack next to the logo — kept tiny so the header stays
-// uncluttered, but gives visitors an instant visual taste of the work.
-function HeaderShowcase() {
-  const projects = useProjects();
-
-  const picks = useMemo(() => {
-    if (!Array.isArray(projects)) return [];
-    return projects.filter((p) => p.image && p.tags?.some((tg) => /ui|ux/i.test(tg))).slice(0, 3);
-  }, [projects]);
-
-  if (picks.length === 0) return null;
-
-  return (
-    <Link href="/works" className="hidden lg:flex items-center -space-x-2 rtl:space-x-reverse shrink-0" aria-label="see work">
-      {picks.map((p, i) => (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          key={p.id}
-          src={p.image as string}
-          alt={p.title}
-          referrerPolicy="no-referrer"
-          className="w-7 h-7 rounded-full object-cover border-2 border-background shadow-sm transition-transform hover:-translate-y-0.5"
-          style={{ zIndex: 10 - i }}
-        />
-      ))}
-    </Link>
-  );
-}
-
-// Three-letter monogram (F · G · H) as a small cluster of overlapping circles —
-// a playful mark instead of a single flat badge.
+// Two-letter monogram (F + G) — one circle, both letters slightly offset so
+// they read as a single designed mark rather than two stacked badges.
 function Logo() {
-  const hoverMotion = ["group-hover:-translate-x-0.5 group-hover:-rotate-6", "group-hover:-translate-y-0.5", "group-hover:translate-x-0.5 group-hover:rotate-6"];
   return (
-    <span className="relative flex items-center w-[52px] h-8 shrink-0">
-      {["F", "G", "H"].map((letter, i) => (
-        <span
-          key={letter}
-          className={`absolute w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-extrabold text-primary-foreground bg-primary shadow-sm transition-transform duration-300 ${hoverMotion[i]}`}
-          style={{ left: i * 11, opacity: 1 - i * 0.22, zIndex: 30 - i * 10 }}
-        >
-          {letter}
-        </span>
-      ))}
+    <span className="relative flex items-center justify-center w-8 h-8 rounded-full bg-primary shrink-0 shadow-sm transition-transform group-hover:-translate-y-0.5">
+      <span className="relative text-primary-foreground font-extrabold text-[13px] tracking-tighter">
+        <span className="relative">F</span>
+        <span className="relative -ml-[3px]">G</span>
+      </span>
     </span>
   );
 }
@@ -137,13 +100,11 @@ export default function Header() {
       }}
     >
       <div className="max-w-5xl mx-auto flex items-center justify-between gap-4 px-6 py-4">
-        {/* Logo: three-letter monogram + name — no boxed background, kept light */}
+        {/* Logo: two-letter monogram + name — no boxed background, kept light */}
         <Link href="/" className="flex items-center gap-2 shrink-0 group">
           <Logo />
           <span className="hidden sm:block text-sm font-extrabold">{t.name}</span>
         </Link>
-
-        <HeaderShowcase />
 
         {/* Nav: plain text links, active one underlined — no filled pill container */}
         <nav className="hidden md:flex items-center gap-6 mx-auto">
@@ -161,10 +122,8 @@ export default function Header() {
           })}
         </nav>
 
-        <div className="flex items-center gap-3 shrink-0">
-          <div className="hidden sm:block">
-            <PreferencesSwitcher />
-          </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <PreferencesSwitcher />
           <Button
             size="icon"
             variant="outline"
@@ -177,18 +136,20 @@ export default function Header() {
         </div>
       </div>
 
-      {open && (
-        <div className="md:hidden px-6 pb-5 flex flex-col gap-4 border-t border-border bg-background">
-          {navItems.map((item) => (
-            <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className="text-sm font-medium pt-3 text-foreground">
-              {item.label}
-            </Link>
-          ))}
-          <div className="pt-2 sm:hidden">
-            <PreferencesSwitcher />
+      <div
+        className="md:hidden grid transition-all duration-300 ease-in-out border-t border-border bg-background"
+        style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
+      >
+        <div className="overflow-hidden">
+          <div className="px-6 pb-5 pt-2 flex flex-col gap-4">
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className="text-sm font-medium pt-3 text-foreground">
+                {item.label}
+              </Link>
+            ))}
           </div>
         </div>
-      )}
+      </div>
     </header>
   );
 }

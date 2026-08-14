@@ -77,6 +77,10 @@ export interface Copy {
   workPageTitle: string;
   workPageSub: string;
   filterAll: string;
+  filterUiUx: string;
+  filterCaseStudy: string;
+  sortNewest: string;
+  sortOldest: string;
   searchPlaceholder: string;
   noResults: string;
   loadMore: string;

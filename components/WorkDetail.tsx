@@ -76,11 +76,9 @@ export default function WorkDetail() {
         )}
       </div>
 
-      {project.category && (
-        <div style={{ color: tint }} className="text-xs font-bold uppercase tracking-wide mb-3">
-          {project.category}
-        </div>
-      )}
+      <div style={{ color: tint }} className="text-xs font-bold uppercase tracking-wide mb-3">
+        {isDriveLink(project.onlineLink) ? t.filterCaseStudy : t.filterUiUx}
+      </div>
       <h1 style={{ fontWeight: 800 }} className="text-3xl md:text-4xl mb-4">
         {project.title}
       </h1>

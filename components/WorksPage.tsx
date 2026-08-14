@@ -2,18 +2,20 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Dribbble, Search, X } from "lucide-react";
+import { ArrowRight, ArrowDownUp, Dribbble, Search, X } from "lucide-react";
 import { useSite } from "./SiteContext";
 import { useProjects } from "./useProjects";
 import WorkCard from "./WorkCard";
 import Reveal from "./Reveal";
 import { DRIBBBLE_URL, projectDesc } from "./copy";
+import { isDriveLink } from "@/lib/drive";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const PAGE_SIZE = 6;
-const ALL_VALUE = "__all__";
+
+type Bucket = "all" | "ui-ux" | "case-study";
+type Sort = "newest" | "oldest";
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -28,36 +30,52 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 export default function WorksPage() {
   const { t, locale } = useSite();
   const projects = useProjects();
-  const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [bucket, setBucket] = useState<Bucket>("all");
+  const [sort, setSort] = useState<Sort>("newest");
   const [query, setQuery] = useState("");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
-  const tags = useMemo(() => {
-    if (!Array.isArray(projects)) return [];
-    return [...new Set(projects.map((p) => p.category).filter(Boolean))];
-  }, [projects]);
+  // A project counts as a "case study" when its online link is a Google Drive
+  // file (like a resume) rather than a live site — no extra field needed in
+  // the API, and everything else is grouped simply as "UI/UX".
+  const isCaseStudy = (onlineLink: string | null) => isDriveLink(onlineLink);
 
   const filtered = useMemo(() => {
     if (!Array.isArray(projects)) return projects;
     const q = query.trim().toLowerCase();
-    return projects.filter((p) => {
-      const matchesTag = !activeTag || p.category === activeTag;
+
+    const result = projects.filter((p) => {
+      const matchesBucket =
+        bucket === "all" || (bucket === "case-study" ? isCaseStudy(p.onlineLink) : !isCaseStudy(p.onlineLink));
       const matchesQuery =
         !q ||
         p.title.toLowerCase().includes(q) ||
         projectDesc(p, locale).toLowerCase().includes(q) ||
         (p.tags || []).some((tg) => tg.toLowerCase().includes(q));
-      return matchesTag && matchesQuery;
+      return matchesBucket && matchesQuery;
     });
-  }, [projects, activeTag, query, locale]);
+
+    return [...result].sort((a, b) => {
+      const na = Number(a.id);
+      const nb = Number(b.id);
+      const cmp = Number.isFinite(na) && Number.isFinite(nb) ? na - nb : String(a.id).localeCompare(String(b.id));
+      return sort === "newest" ? -cmp : cmp;
+    });
+  }, [projects, bucket, query, locale, sort]);
 
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
-  }, [activeTag, query]);
+  }, [bucket, query, sort]);
 
   const hasAnyProjects = Array.isArray(projects) && projects.length > 0;
   const visible = Array.isArray(filtered) ? filtered.slice(0, visibleCount) : filtered;
   const canLoadMore = Array.isArray(filtered) && visibleCount < filtered.length;
+
+  const buckets: { code: Bucket; label: string }[] = [
+    { code: "all", label: t.filterAll },
+    { code: "ui-ux", label: t.filterUiUx },
+    { code: "case-study", label: t.filterCaseStudy },
+  ];
 
   return (
     <div>
@@ -70,45 +88,50 @@ export default function WorksPage() {
         <p className="max-w-xl text-sm text-muted-foreground">{t.workPageSub}</p>
 
         {hasAnyProjects && (
-          <div className="mt-8 flex flex-col md:flex-row md:items-center gap-3">
-            <div className="relative w-full md:max-w-sm">
-              <Search size={15} className="absolute top-1/2 -translate-y-1/2 start-3.5 pointer-events-none text-muted-foreground" />
-              <Input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder={t.searchPlaceholder}
-                className="ps-9 pe-9"
-              />
-              {query && (
-                <button
-                  onClick={() => setQuery("")}
-                  className="absolute top-1/2 -translate-y-1/2 end-3 text-muted-foreground"
-                  aria-label="clear search"
-                >
-                  <X size={14} />
-                </button>
-              )}
+          <div className="mt-8 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+              <div className="relative w-full sm:w-64">
+                <Search size={15} className="absolute top-1/2 -translate-y-1/2 start-3.5 pointer-events-none text-muted-foreground" />
+                <Input
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder={t.searchPlaceholder}
+                  className="ps-9 pe-9"
+                />
+                {query && (
+                  <button
+                    onClick={() => setQuery("")}
+                    className="absolute top-1/2 -translate-y-1/2 end-3 text-muted-foreground"
+                    aria-label="clear search"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
+              </div>
+
+              <div className="flex items-center gap-1 rounded-full border border-border bg-card p-1 w-fit">
+                {buckets.map(({ code, label }) => (
+                  <Button
+                    key={code}
+                    size="sm"
+                    variant={bucket === code ? "default" : "ghost"}
+                    className="h-7 px-3 rounded-full text-xs"
+                    onClick={() => setBucket(code)}
+                  >
+                    {label}
+                  </Button>
+                ))}
+              </div>
             </div>
 
-            {tags.length > 0 && (
-              <Select
-                value={activeTag ?? ALL_VALUE}
-                onValueChange={(v) => setActiveTag(v === ALL_VALUE ? null : v)}
-              >
-                <SelectTrigger className="w-full md:w-48 shrink-0">
-                  <SelectValue placeholder={t.filterAll} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={ALL_VALUE}>{t.filterAll}</SelectItem>
-                  {tags.map((tag) => (
-                    <SelectItem key={tag} value={tag}>
-                      {tag}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
+            <button
+              onClick={() => setSort((s) => (s === "newest" ? "oldest" : "newest"))}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors shrink-0"
+            >
+              <ArrowDownUp size={13} />
+              {sort === "newest" ? t.sortNewest : t.sortOldest}
+            </button>
           </div>
         )}
       </section>
